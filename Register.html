@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration Form</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+        /* Global Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-image: url('20250211_094535.jpg');
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        
+        header,
+        footer {
+            width: 100%;
+            background-color: #2a9d8f;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
+        
+        .box1 {
+            width: 90%;
+            max-width: 600px;
+            margin: 20px;
+            padding: 30px;
+            border: 1px solid #ccc;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        
+        .box1 input,
+        .box1 select {
+            margin: 10px 0;
+            padding: 12px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .box1 input::placeholder,
+        .box1 select option::placeholder {
+            color: #888;
+        }
+
+        .box1 input:hover,
+        .box1 select:hover {
+            border-color: #2a9d8f;
+        }
+
+        
+        .box1 button {
+            margin-top: 20px;
+            padding: 12px 24px;
+            background-color: #2a9d8f;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .box1 button:hover {
+            background-color: #21867a;
+        }
+
+        
+        .social-media a {
+            margin: 0 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="Contact.html">Contact</a></li>
+                <li><a href="Register.html">Register</a></li>
+                <li><a href="login.html">login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home">
+        
+    </section>
+
+    <section id="registration">
+        <h2>User Registration Form</h2>
+        <form id="registrationForm" class="box1">
+            <input type="text" id="fullName" name="fullName" placeholder="Full Name" required>
+            <span class="error" id="fullNameError"></span>
+
+            <input type="text" id="regNumber" name="regNumber" placeholder="Registration Number" required>
+            <span class="error" id="regNumberError"></span>
+
+            <select id="sex" name="sex" required>
+                <option value="">Select Sex</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+
+            <input type="email" id="email" name="email" placeholder="Email" required>
+            <span class="error" id="emailError"></span>
+
+            <select id="region" required>
+                <option value="">Select a region</option>
+            </select>
+
+            <select id="district" required>
+                <option value="">Select a district</option>
+            </select>
+
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <span class="error" id="passwordError"></span>
+
+            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required>
+            <span class="error" id="confirmPasswordError"></span>
+
+            <button type="submit">Register</button>
+        </form>
+    </section>
+
+    <footer>
+        <div class="social-media">
+            <p>&copy; 2025 Taste bud Cafe & Restaurant. All rights reserved.</p>
+            <a href="https://www.facebook.com" target="_blank" class="fa fa-facebook"></a>
+            <a href="https://www.twitter.com" target="_blank" class="fa fa-twitter"></a>
+            <a href="https://www.instagram.com" target="_blank" class="fa fa-instagram"></a>
+        </div>
+    </footer>
+
+    <script>
+        $(document).ready(function () {
+            // Load the JSON file and populate the regions
+            $.getJSON('regions.json', function (data) {
+                let regionOptions = '<option value="">Select a region</option>';
+
+                // Populate region dropdown
+                $.each(data, function (key, region) {
+                    regionOptions += '<option value="' + region.code + '">' + region.name + '</option>';
+                });
+                $('#region').html(regionOptions);
+
+                // Handle region selection
+                $('#region').change(function () {
+                    let regionCode = $(this).val();
+                    let districtOptions = '<option value="">Select a district</option>';
+
+                    // Find the selected region
+                    let selectedRegion = data.find(region => region.code === regionCode);
+
+                    if (selectedRegion) {
+                        // Populate district dropdown for the selected region
+                        $.each(selectedRegion.districts, function (key, district) {
+                            districtOptions += '<option value="' + district.name + '">' + district.name + '</option>';
+                        });
+                        $('#district').html(districtOptions);
+                    } else {
+                        $('#district').html('<option value="">Select a district</option>');
+                    }
+                });
+            });
+
+            // Validate registration number format
+            $('#regNumber').on('input', function () {
+                let regExp = /^BCS-\d{2}-\d{4}-\d{4}$/;
+                if (!regExp.test($(this).val())) {
+                    $('#regNumberError').text('Invalid format. Example: BCS-XX-XXXX-XXXX').addClass('visible');
+                } else {
+                    $('#regNumberError').text('').removeClass('visible');
+                }
+            });
+
+            // Email validation
+            $('#email').on('input', function () {
+                let regExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!regExp.test($(this).val())) {
+                    $('#emailError').text('Please enter a valid email address').addClass('visible');
+                } else {
+                    $('#emailError').text('').removeClass('visible');
+                }
+            });
+
+            // Password matching validation
+            $('#confirmPassword').on('input', function () {
+                if ($(this).val() !== $('#password').val()) {
+                    $('#confirmPasswordError').text('Passwords do not match').addClass('visible');
+                } else {
+                    $('#confirmPasswordError').text('').removeClass('visible');
+                }
+            });
+
+            // Form submission
+            $('#registrationForm').submit(function (event) {
+                event.preventDefault();
+                alert('Form submitted successfully!');
+            });
+        });
+    </script>
+</body>
+
+</html>
